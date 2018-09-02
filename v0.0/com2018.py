@@ -14,8 +14,9 @@ import time
 st = time.time()
 df_train = pd.read_csv('../input/train_set.csv')
 df_test = pd.read_csv('../input/test_set.csv')
-df_train.drop(['article, id'], inplace=True)
-df_test.drop(['article, id'], inplace=True)
+df_train.drop('article', axis=1, inplace=True)
+df_train.drop('id', axis=1, inplace=True)
+df_test.drop('article', axis=1, inplace=True)
 et = time.time()
 import_time = et - st
 print("数据导入完成, 耗时 {:.3f}s".format(import_time))
@@ -38,6 +39,7 @@ st = time.time()
 lg = LogisticRegression(C=4, dual=True)
 lg.fit(x_train, y_train)
 y_test = lg.predict(x_test)
+et = time.time()
 model_time = et - st
 print("建模预测完成, 耗时 {:.3f}s".format(model_time))
 '''
@@ -48,6 +50,7 @@ df_test['class'] = y_test.tolist()
 df_test['class'] = df_test['class'] + 1
 df_result = df_test.loc[:, ['id', 'class']]
 df_result.to_csv('result.csv', index=False)
+et = time.time()
 export_time = et - st
 print("文件导出完成, 耗时 {:.3f}s".format(export_time))
 print("完成..........共耗时 {:.3f}s".format(import_time + feature_time + model_time + export_time))
